@@ -24,14 +24,14 @@ type Repository struct {
 }
 
 func (r *Repository) CreateBook(context *fiber.Ctx) error {
-	book := Book{}
+	book := &Book{}
 
-	err := context.BodyParser(&book)
-
+	err := context.BodyParser(book)
 	if err != nil {
-		context.Status(http.StatusUnprocessableEntity).JSON(
+		fmt.Println("err", err)
+		return context.JSON(
 			&fiber.Map{"message": "request failed"})
-		return err
+
 	}
 
 	err = r.DB.Create(&book).Error
